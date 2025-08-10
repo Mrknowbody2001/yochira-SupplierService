@@ -1,3 +1,4 @@
+import RawMaterial from "../Models/RawMaterial.js";
 import Supplier from "../Models/Supplier.js";
 import generateSupplierId from "../utils/SupplerId.js";
 
@@ -135,3 +136,67 @@ export const getOneSupplier = async (req, res, next) => {
 };
 
 // approved supplier
+
+export const approvedSupplier = async (req, res, next) => {
+  try {
+    const Id = req.params.id;
+    const supplier = await Supplier.findById(Id);
+    if (!supplier) {
+      return res.status(404).json({ message: "Supplier not found" });
+    }
+    // Update the supplier's status to "approved"
+    supplier.status = "approved";
+    await supplier.save();
+    res.status(200).json({
+      message: "Supplier approved successfully",
+      supplier,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// get all suppliers (with optional status filter)
+export const getAllApprovedSuppliers = async (req, res, next) => {
+  try {
+    const { status } = req.query; // read ?status=approved from the URL
+    let filter = {};
+
+    // If a status is provided, add it to the filter
+    if (status) {
+      filter.status = status;
+    }
+
+    const suppliers = await Supplier.find(filter);
+
+    res.status(200).json({
+      message: "Suppliers fetched successfully",
+      suppliers,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+    });
+    next(error);
+  }
+};
+
+//!get approved supplier materials
+
+export const getApprovedSupplierMaterials = async (supplierId) => {
+  const supplier = await Supplier.findOne({ supplierId, status: "approved" });
+  if (!supplier) {
+    throw new Error("Supplier not found or not approved");
+  }
+
+  const mapping = await SupplierMaterialMapping.findOne({
+    supplier: supplier._id,
+  }).populate("materials");
+
+  if (!mapping) {
+    throw new Error("No materials mapped to this supplier");
+  }
+
+  return { supplier, materials: mapping.materials };
+};
