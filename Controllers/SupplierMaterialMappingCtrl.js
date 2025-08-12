@@ -21,11 +21,15 @@ export const createMapping = async (req, res) => {
       materialId: { $in: materialIds },
     });
     if (materials.length !== materialIds.length) {
-      return res.status(404).json({ message: "One or more materials not found" });
+      return res
+        .status(404)
+        .json({ message: "One or more materials not found" });
     }
 
     // 3. Check if mapping already exists
-    const existing = await SupplierMaterialMapping.findOne({ supplier: supplier._id });
+    const existing = await SupplierMaterialMapping.findOne({
+      supplier: supplier._id,
+    });
 
     if (existing) {
       // Merge material IDs without duplicates
@@ -35,7 +39,9 @@ export const createMapping = async (req, res) => {
       existing.materials = Array.from(mergedSet);
 
       await existing.save();
-      return res.status(200).json({ message: "Mapping updated", data: existing });
+      return res
+        .status(200)
+        .json({ message: "Mapping updated", data: existing });
     } else {
       // Create new mapping
       const newMapping = new SupplierMaterialMapping({
@@ -44,9 +50,10 @@ export const createMapping = async (req, res) => {
       });
 
       await newMapping.save();
-      return res.status(201).json({ message: "Mapping created", data: newMapping });
+      return res
+        .status(201)
+        .json({ message: "Mapping created", data: newMapping });
     }
-
   } catch (err) {
     console.error("Error in createMapping:", err);
     res.status(500).json({ error: err.message });
@@ -56,7 +63,9 @@ export const createMapping = async (req, res) => {
 // ✅ Get all materials (for dropdowns etc.)
 export const getAllMaterials = async (req, res) => {
   try {
-    const materials = await RawMaterial.find().select("materialId materialName");
+    const materials = await RawMaterial.find().select(
+      "materialId materialName"
+    );
     res.status(200).json({ materials });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -136,7 +145,9 @@ export const getMaterialsBySupplier = async (req, res) => {
     }).populate("materials");
 
     if (!mapping) {
-      return res.status(404).json({ message: "No materials mapped to this supplier" });
+      return res
+        .status(404)
+        .json({ message: "No materials mapped to this supplier" });
     }
 
     res.status(200).json({
@@ -147,4 +158,3 @@ export const getMaterialsBySupplier = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-

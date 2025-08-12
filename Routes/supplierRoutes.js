@@ -24,16 +24,16 @@ router.delete("/delete/:id", deleteSupplier);
 router.put("/update/:id", supplierValidator, updateSupplier);
 
 // Get all suppliers
-router.get("/", getAllSuppliers);
+router.get("/getAllSuppliers", getAllSuppliers);
 
 // Get supplier by ID
 router.get("/getOneSupplier/:id", getOneSupplier);
 
 // Get next supplier ID
-router.get("/supplierId/next", getSupplierId);
+router.get("/supplierId", getSupplierId);
 
 // Approve supplier by ID
-router.put("/approve/:id", approvedSupplier);
+router.put("/approved/:id", approvedSupplier);
 
 // Get all approved suppliers
 router.get("/getAllApprovedSuppliers", getAllApprovedSuppliers);

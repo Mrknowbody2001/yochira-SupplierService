@@ -20,16 +20,16 @@ router.get("/SoNo", getSONo);
 //get all supplier orders
 router.get("/all", getAllSupplierOrders);
 
+//get pending orders
+router.get("/pending-orders", getPendingOrders);
+
 //update supplier order
 router.put("/update/:id", updateSupplierOrder);
 
 //get one supplier order
- router.get("/:id", getSupplierOrderById); // Uncomment if you implement this
+router.get("/:id", getSupplierOrderById); // Uncomment if you implement this
 
- //approved supplier order
- router.put("/approve/:id",approveSupplierOrder)
-
- //get pending orders
- router.get("/pending-orders", getPendingOrders);  
+//approved supplier order
+router.put("/approve/:id", approveSupplierOrder);
 
 export default router;

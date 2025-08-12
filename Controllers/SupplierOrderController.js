@@ -131,7 +131,8 @@ export const getAllSupplierOrders = async (req, res, next) => {
 export const updateSupplierOrder = async (req, res, next) => {
   try {
     const { id } = req.params; // Order ID from URL
-    const { supplierId, items, paymentType, deliveryDate, remark, status } = req.body;
+    const { supplierId, items, paymentType, deliveryDate, remark, status } =
+      req.body;
 
     // Find existing order
     const existingOrder = await SupplierOrder.findById(id);
@@ -184,7 +185,9 @@ export const updateSupplierOrder = async (req, res, next) => {
         return res.status(400).json({ message: "Invalid quantity for item" });
       }
       if (isNaN(unitPrice) || unitPrice < 0) {
-        return res.status(400).json({ message: "Invalid unit price for material" });
+        return res
+          .status(400)
+          .json({ message: "Invalid unit price for material" });
       }
 
       const value = qty * unitPrice;
@@ -267,6 +270,8 @@ export const getPendingOrders = async (req, res, next) => {
   try {
     const pendingOrders = await SupplierOrder.find({ status: "pending" });
     res.status(200).json(pendingOrders);
+    console.log(pendingOrders);
+    
   } catch (error) {
     next(error);
   }
