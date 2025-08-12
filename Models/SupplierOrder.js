@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 const supplierOrderSchema = new mongoose.Schema(
   {
-    soNo: { type: String, required: true, unique: true },
+    SONo: { type: String, required: true, unique: true },
 
     supplierId: {
       type: String, // Supplier ID from Supplier collection
@@ -27,7 +27,7 @@ const supplierOrderSchema = new mongoose.Schema(
 
     paymentType: {
       type: String,
-      enum: ["Card", "Cheque"],
+      enum: ["card", "cash", "cheque"],
       required: true,
     },
     deliveryDate: { type: Date, required: true },
